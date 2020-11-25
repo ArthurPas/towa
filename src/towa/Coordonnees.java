@@ -167,26 +167,70 @@ class Coordonnees {
         }
         return Arrays.copyOf(voisines, nbVoisines);
     }
+     /**
+     * Retourne les coordonnées de toutes les cases voisines en diagonale.
+     * 
+     * @return les coordonnées de toutes les cases voisines diagonales
+     */
+    Coordonnees[] voisinesDiagonale() {
+        Coordonnees[] voisines = new Coordonnees[4];        
+        int nbVoisines = 0;
+        for (Direction d: Direction.diagonales()) {
+            Coordonnees voisine = suivante(d,1);
+         if(voisine.estDansPlateau()) {
+             voisines[nbVoisines]=voisine;
+             nbVoisines++;
+         }
+        }
+        return voisines;
+    }
     /**
      * Retourne les coordonnées de toutes les case présente sur les mêmes ligne et colonnes 
-     *
+     * 
+     *@return un tableau des coordonnées
      */
-    Coordonnees [] ligneEtCol(){
+    Coordonnees[] ligneEtCol(){
         int nbMax=2*NB_LIGNES-1+2*NB_COLONNES-1;
         Coordonnees[] lignes = new Coordonnees[nbMax];
         int nb = 0;
         for (Direction d: Direction.cardinales()) {
             for (int i = 2; i < NB_LIGNES; i++) {
                 Coordonnees ligneEtCol = suivante(d, i);
-                if(ligneEtCol.estDansPlateau()) {
-                     lignes[nb]=ligneEtCol;
+                if(ligneEtCol.estDansPlateau()) {         
+                    lignes[nb]=ligneEtCol;
                      nb++;
                  }
             }
         }
-        System.out.println(lignes);
         return Arrays.copyOf(lignes, nb);
     }
+    /**
+     * Retourne les coordonnées de la première tour trouvée (si elle existe) dans 
+     * chacunes des directions cardinales
+     * @param plateau le plateau
+     * @return un tableau de 4 coordonnées
+     */
+    Coordonnees[] premiereSuivante(Case [][] plateau){
+        Coordonnees[] premiereTour =new Coordonnees[4];
+        int j=0;
+        for (Direction d : Direction.cardinales()) {
+            boolean tourTrouve=false;
+            int i=1;
+            while(i<NB_LIGNES && !tourTrouve){
+                Coordonnees s = suivante(d, i);               
+                if(s.estDansPlateau()) {
+                    if(plateau[s.ligne][s.colonne].tourPresente){
+                        premiereTour[j]=s;
+                        tourTrouve=true;
+                        j++;
+                    }
+                }
+                i++;    
+            }
+        }
+        return premiereTour;
+    }
+       
     /**
      * Test d'égalité entre coordonnées.
      * 

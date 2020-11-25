@@ -73,9 +73,6 @@ public class JoueurTowa implements IJoueurTowa {
                 }
             }
         }
-        for (String action : actions) {
-            System.out.println(action);
-        }
         
         System.out.println("actionsPossibles : fin");
         return Utils.nettoyerTableau(actions);
@@ -136,24 +133,31 @@ public class JoueurTowa implements IJoueurTowa {
      */
     static int nbPionsDetruits(Case [][] plateau,Coordonnees coord, boolean estNoir){
         Coordonnees vois [];
-        vois = coord.voisines();
+        Case c =plateau[coord.ligne][coord.colonne];
+        vois = coord.voisinesDiagonale();
         int nbPionsVoisin=0;
         for (Coordonnees val : vois) {
-                if (plateau[coord.ligne][coord.colonne].hauteur > plateau[val.ligne][val.colonne].hauteur && 
-                    estNoir!=plateau[val.ligne][val.colonne].estNoire)
-                        nbPionsVoisin+=plateau[val.ligne][val.colonne].hauteur;
-                
+                if (val!=null && plateau[val.ligne][val.colonne].tourPresente 
+                        && c.hauteur > plateau[val.ligne][val.colonne].hauteur && 
+                        estNoir!=plateau[val.ligne][val.colonne].estNoire){
+
+                    nbPionsVoisin+=plateau[val.ligne][val.colonne].hauteur;
+                }
         }
-        Coordonnees lec[];
-        lec = coord.ligneEtCol();
-        int nbPionsLEC= 0;
-        for (Coordonnees val : lec) {
-                if (plateau[coord.ligne][coord.colonne].hauteur > plateau[val.ligne][val.colonne].hauteur && 
-                    estNoir!=plateau[val.ligne][val.colonne].estNoire)
-                        nbPionsLEC+=plateau[val.ligne][val.colonne].hauteur;
+        Coordonnees premiere[];
+        premiere = coord.premiereSuivante(plateau);
+        int nbPionsSuivant= 0;
+        for (Coordonnees val : premiere) {
+            if (val!= null && c.hauteur > plateau[val.ligne][val.colonne].hauteur && 
+                    estNoir!=plateau[val.ligne][val.colonne].estNoire){
+                    
+                nbPionsSuivant+=plateau[val.ligne][val.colonne].hauteur;
+                   
+           }
+            
         
         }
-    return nbPionsVoisin+nbPionsLEC;
+    return nbPionsVoisin+nbPionsSuivant;
     }
     
     /**
@@ -168,7 +172,7 @@ public class JoueurTowa implements IJoueurTowa {
         vois = coord.voisines();
         boolean tourPresente=false;
         for (Coordonnees val : vois) {
-            if(plateau[val.ligne][val.colonne].tourPresente && (plateau[val.ligne][val.colonne].estNoire==!estNoir)){
+            if( val!=null && plateau[val.ligne][val.colonne].tourPresente && (plateau[val.ligne][val.colonne].estNoire==!estNoir)){
                 tourPresente=true;
             }
         }

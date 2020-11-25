@@ -16,10 +16,13 @@ public class JoueurTowaTest {
      */
     @Test
     public void testActionsPossibles() {
-//         testActionsPossibles_niveau1();
-        testActionsPossibles_niveau2();
-//     testActionsPossibles_niveau3();
- //        testActionsPossibles_niveau4();
+//        testActionsPossibles_niveau1();
+//        testActionsPossibles_niveau2();
+//        testActionsPossibles_niveau3();
+//        testActionsPossibles_niveau4();
+//        testActionsPossibles_niveau5();
+//        testActionsPossibles_niveau6();
+        testActionsPossibles_niveau7();
     }
 
     /**
@@ -280,23 +283,20 @@ public class JoueurTowaTest {
     }
     @Test
     public void testNbPionsDetruits(){
-        Case[][] plateau3 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU3);
+        Case[][] plateau7 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU7BIS);
         Coordonnees coord;
-        //activation d'une tour noire entourée de tours plus hautes
-        coord = Coordonnees.depuisCars('a', 'A');
-        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau3,coord, true));
-        //activation d'une tour noire entourée d'une tour blanche plus basse : doit détruire 1
-        coord = Coordonnees.depuisCars('a', 'B');
-        assertEquals(3, JoueurTowa.nbPionsDetruits(plateau3,coord, true)); 
-        //activation d'une tour noire entourée de tours plus hautes
-        coord = Coordonnees.depuisCars('b', 'B');
-        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau3,coord, false));
-        //Activation d'une tour blanche : 6 noir détruits
-        coord = Coordonnees.depuisCars('b', 'C');
-        assertEquals(6, JoueurTowa.nbPionsDetruits(plateau3,coord, false));
-        //Activation tour blanche : 0 détruits
-        coord = Coordonnees.depuisCars('p', 'F');
-        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau3,coord, false));
+//        //activation d'une tour noire entourée de tours plus hautes
+//        coord = Coordonnees.depuisCars('c', 'E');
+//        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
+//        Activation d'une tour noir : 1 blancs détruits
+//        coord = Coordonnees.depuisCars('j', 'H');
+//        assertEquals(1, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
+        coord = Coordonnees.depuisCars('h', 'H');
+        //activation d'une tour blanche : 7 noirs détruits
+        assertEquals(7, JoueurTowa.nbPionsDetruits(plateau7,coord, false));
+////        Activation tour blanche : 0 détruits
+//        coord = Coordonnees.depuisCars('j', 'F');
+//        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, false));
     }
     @Test
     public void testChaineActionPose() {
@@ -467,7 +467,7 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "e|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-            "f|   |   |   |   |   |N2 |B2 |   |   |   |   |   |   |   |   |   |\n" +
+            "f|   |   |   |   |   |N2 |B1 |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "g|   |   |B1 |N1 |   |N3 |   |   |B1 |B1 |   |N1 |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
@@ -490,6 +490,40 @@ public class JoueurTowaTest {
             "p|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
             
-    
+    final String PLATEAU_NIVEAU7BIS
+            =" A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P \n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "a|N4 |B1 |N4 |B2 |N2 |   |   |   |   |B3 |B1 |   |N1 |B2 |   |N1 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "b|N4 |B2 |   |   |   |   |B1 |N2 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "c|B3 |   |   |   |N1 |   |B2 |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "d|   |   |   |   |   |   |N2 |   |   |N2 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "e|   |   |   |   |B3 |B1 |B1 |B4 |   |   |B1 |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "f|B1 |   |   |B1 |   |   |   |B4 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "g|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "h|B2 |   |   |N2 |   |   |   |B4 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "i|   |   |N2 |   |B1 |   |N2 |N3 |   |   |   |   |   |   |   |B1 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "j|N4 |B1 |   |   |   |B1 |   |N4 |   |   |   |   |   |   |   |N2 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "k|   |   |   |   |   |   |   |N1 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "l|   |   |   |N1 |N1 |   |   |N2 |   |   |   |   |   |N1 |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "m|B1 |   |   |   |   |   |B1 |   |   |   |   |   |B2 |N1 |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "n|B4 |   |N1 |   |   |B1 |   |N2 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "o|   |   |   |   |B1 |N2 |N3 |N3 |   |   |   |   |   |B1 |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "p|B4 |N1 |   |B1 |   |B1 |N1 |N4 |B2 |   |   |   |   |B3 |N4 |B4 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";
 }
 
