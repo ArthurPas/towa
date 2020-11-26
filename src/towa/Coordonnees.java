@@ -150,32 +150,17 @@ class Coordonnees {
         
     }
 
+
     /**
-     * Retourne les coordonnées de toutes les cases voisines.
+     * Retourne les coordonnées de toutes les cases voisines dans une direction 
+     * donnée
      * 
      * @return les coordonnées de toutes les cases voisines
      */
-    Coordonnees[] voisines() {
+    Coordonnees[] voisinesDirection(Direction[] directionASuivre) {
         Coordonnees[] voisines = new Coordonnees[8];        
         int nbVoisines = 0;
-        for (Direction d: Direction.toutes()) {
-            Coordonnees voisine = suivante(d,1);
-         if(voisine.estDansPlateau()) {
-             voisines[nbVoisines]=voisine;
-             nbVoisines++;
-         }
-        }
-        return Arrays.copyOf(voisines, nbVoisines);
-    }
-     /**
-     * Retourne les coordonnées de toutes les cases voisines en diagonale.
-     * 
-     * @return les coordonnées de toutes les cases voisines diagonales
-     */
-    Coordonnees[] voisinesDiagonale() {
-        Coordonnees[] voisines = new Coordonnees[4];        
-        int nbVoisines = 0;
-        for (Direction d: Direction.diagonales()) {
+        for (Direction d: directionASuivre) {
             Coordonnees voisine = suivante(d,1);
          if(voisine.estDansPlateau()) {
              voisines[nbVoisines]=voisine;
@@ -202,7 +187,7 @@ class Coordonnees {
                  }
             }
         }
-        return Arrays.copyOf(lignes, nb);
+        return lignes;
     }
     /**
      * Retourne les coordonnées de la première tour trouvée (si elle existe) dans 

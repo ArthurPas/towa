@@ -263,7 +263,52 @@ public class JoueurTowaTest {
         int nbPionsBlancsAEnlever = JoueurTowa.nbPionsDetruits(plateau, coord, true);
         assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
                 JoueurTowa.chaineActionActive(coord, nbPionsNoir, nbPionsBlancs-nbPionsBlancsAEnlever))));
+    }
+    @Test 
+    public void testActionsPossibles_niveau8(){
+        JoueurTowa joueur = new JoueurTowa();
+        Case[][] plateau = Utils.plateauDepuisTexte(PlATEAU_NIVEAU7);
+        boolean estNoir = true;
+        int niveau = 8;
+        int nbPionsNoir = JoueurTowa.nbPions(plateau, true);
+        int nbPionsBlancs = JoueurTowa.nbPions(plateau, false);
         
+        String[] actionsPossibles = joueur.actionsPossibles(plateau, estNoir, niveau);
+        Coordonnees coord;
+        //pose sur une case avec un tour de même couleur de hauteur 1 : possible
+        coord = Coordonnees.depuisCars('g', 'D');
+                assertTrue(Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionPose(coord, nbPionsNoir + 1, nbPionsBlancs)));
+        //Activation d'une tour non présente
+        coord = Coordonnees.depuisCars('a', 'A');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionActive(coord, nbPionsNoir, nbPionsBlancs))));
+        //activation d'une tour noire entourée 
+        coord = Coordonnees.depuisCars('g', 'F');
+        int nbPionsBlancsAEnlever = JoueurTowa.nbPionsDetruits(plateau, coord, true);
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionActive(coord, nbPionsNoir, nbPionsBlancs-nbPionsBlancsAEnlever))));
+        //fusion d'une tour noire existante avec recupéreration de plus de 4 pions
+        coord = Coordonnees.depuisCars('g', 'F');
+        int nbApresFusion = JoueurTowa.nbPionsSupApresFusion(plateau, coord, estNoir);
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionFusion(coord,nbPionsNoir-nbApresFusion, nbPionsBlancs))));
+        //fusion d'une tour noire existante avec recupéreration de moins de 4 pions
+        coord = Coordonnees.depuisCars('g', 'O');
+        int nbApresFusion2 = JoueurTowa.nbPionsSupApresFusion(plateau, coord, estNoir);
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionFusion(coord,nbPionsNoir-nbApresFusion2, nbPionsBlancs))));
+        
+        //fusion d'une tour inexsistante 
+        coord = Coordonnees.depuisCars('a', 'A');
+        int nbApresFusion3= JoueurTowa.nbPionsSupApresFusion(plateau, coord, estNoir);
+        assertFalse(((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionFusion(coord,nbPionsNoir-nbApresFusion3, nbPionsBlancs)))));
+        //fusion d'une tour inutile
+        coord = Coordonnees.depuisCars('c', 'M');
+        int nbApresFusion4= JoueurTowa.nbPionsSupApresFusion(plateau, coord, estNoir);
+        assertTrue(((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionFusion(coord,nbPionsNoir-nbApresFusion4, nbPionsBlancs)))));
     }
     @Test
     public void testNbPions() {
@@ -286,17 +331,27 @@ public class JoueurTowaTest {
         Case[][] plateau7 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU7BIS);
         Coordonnees coord;
 //        //activation d'une tour noire entourée de tours plus hautes
-//        coord = Coordonnees.depuisCars('c', 'E');
-//        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
+        coord = Coordonnees.depuisCars('c', 'E');
+        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
 //        Activation d'une tour noir : 1 blancs détruits
-//        coord = Coordonnees.depuisCars('j', 'H');
-//        assertEquals(1, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
+        coord = Coordonnees.depuisCars('j', 'H');
+        assertEquals(1, JoueurTowa.nbPionsDetruits(plateau7,coord, true));
         coord = Coordonnees.depuisCars('h', 'H');
         //activation d'une tour blanche : 7 noirs détruits
         assertEquals(7, JoueurTowa.nbPionsDetruits(plateau7,coord, false));
 ////        Activation tour blanche : 0 détruits
-//        coord = Coordonnees.depuisCars('j', 'F');
-//        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, false));
+        coord = Coordonnees.depuisCars('j', 'F');
+        assertEquals(0, JoueurTowa.nbPionsDetruits(plateau7,coord, false));
+    }
+    @Test public void testNbPionsFusione(){
+        Case[][] plateau7 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU7BIS);
+        Coordonnees coord;
+//        //fusion d'une tour noire entourée de tours noire plus hautes
+        coord = Coordonnees.depuisCars('o', 'C');
+        assertEquals(3, JoueurTowa.nbPionsRecuperes(plateau7,coord, true));
+//        //fusion d'une tour noire entourée de tours plus hautes
+        coord = Coordonnees.depuisCars('i', 'G');
+        assertEquals(7, JoueurTowa.nbPionsRecuperes(plateau7,coord, true));
     }
     @Test
     public void testChaineActionPose() {
@@ -461,7 +516,7 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "b|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-            "c|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            "c|   |   |   |   |   |   |   |   |   |   |   |   |N1 |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "d|   |   |   |   |   |B1 |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
@@ -469,7 +524,7 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "f|   |   |   |   |   |N2 |B1 |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-            "g|   |   |B1 |N1 |   |N3 |   |   |B1 |B1 |   |N1 |   |   |   |   |\n" +
+            "g|   |   |B1 |N1 |   |N3 |   |   |B1 |B1 |   |N1 |   |   |N1 |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "h|   |   |   |   |B4 |   |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
@@ -519,9 +574,9 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "m|B1 |   |   |   |   |   |B1 |   |   |   |   |   |B2 |N1 |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-            "n|B4 |   |N1 |   |   |B1 |   |N2 |   |   |   |   |   |   |   |   |\n" +
+            "n|B4 |   |   |   |   |B1 |   |N2 |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
-            "o|   |   |   |   |B1 |N2 |N3 |N3 |   |   |   |   |   |B1 |   |   |\n" +
+            "o|   |   |N1 |   |B1 |N2 |N3 |N3 |   |   |   |   |   |B1 |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "p|B4 |N1 |   |B1 |   |B1 |N1 |N4 |B2 |   |   |   |   |B3 |N4 |B4 |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n";

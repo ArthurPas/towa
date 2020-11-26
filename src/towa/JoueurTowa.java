@@ -70,10 +70,21 @@ public class JoueurTowa implements IJoueurTowa {
                         actions[nbActions]= chaineActionActive(coord, nbPionsNoirs-nbPionsNoirsDetruits, nbPionsBlancs);
                     }
                 nbActions++;
+                
+                }
+                if(fusionTourPossible(plateau, coord, joueurNoir)){
+                    int nbNoirsApresFusion = nbPionsSupApresFusion(plateau, coord, true);
+                    int nbBlancsApresFusion = nbPionsSupApresFusion(plateau, coord, false);
+                    if(joueurNoir){
+                          actions[nbActions] = chaineActionFusion(coord, nbPionsNoirs-nbNoirsApresFusion, nbPionsBlancs);
+                    }
+                    else{
+                        actions[nbActions]= chaineActionFusion(coord, nbPionsNoirs, nbPionsBlancs-nbBlancsApresFusion);
+                    }
+                nbActions++;
                 }
             }
         }
-        
         System.out.println("actionsPossibles : fin");
         return Utils.nettoyerTableau(actions);
         }
@@ -92,6 +103,30 @@ public class JoueurTowa implements IJoueurTowa {
         Case c =plateau[coord.ligne][coord.colonne];
         return ((c.tourPresente) && (c.estNoire == estNoir) && (c.hauteur<4)|| (!c.tourPresente));
        
+    }
+    /**
+     * Indique s'il est possible d'activer une tour
+     *
+     * @param plateau le plateau
+     * @param coord coordonnées de la case à considérer
+     * @param estNoir vrai ssi il s'agit du joueur noir
+     * @return vrai ssi l'activation d'une tour est possible
+     */
+    boolean activeTourPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
+        Case c =plateau[coord.ligne][coord.colonne];
+        return ((c.tourPresente) && (c.estNoire == estNoir));        
+    }
+    /**
+     * Indique s'il est possible de fusionner une tour
+     *
+     * @param plateau le plateau
+     * @param coord coordonnées de la case à considérer
+     * @param estNoir vrai ssi il s'agit du joueur noir
+     * @return vrai ssi l'activation d'une tour est possible
+     */
+    boolean fusionTourPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
+        Case c =plateau[coord.ligne][coord.colonne];
+        return ((c.tourPresente) && (c.estNoire == estNoir));        
     }
     /**
      * Nombre de pions d'une couleur donnée sur le plateau.
@@ -125,6 +160,32 @@ public class JoueurTowa implements IJoueurTowa {
                 + nbPionsNoirs + "," + nbPionsBlancs;
     }
     /**
+     * Chaîne de caractères correspondant à une action-mesure d'activation d'une tour.
+     *
+     * @param coord coordonnées de la case à activer
+     * @param nbPionsNoirs nombre de pions noirs si cette action était jouée
+     * @param nbPionsBlancs nombre de pions blancs si cette action était jouée
+     * @return la chaîne codant cette action-mesure
+     */
+    static String chaineActionActive(Coordonnees coord,
+            int nbPionsNoirs, int nbPionsBlancs) {
+        return "A" + coord.carLigne() + coord.carColonne() + ","
+                + nbPionsNoirs + "," + nbPionsBlancs;
+    }
+    /**
+     * Chaîne de caractères correspondant à une action-mesure d'activation d'une tour.
+     *
+     * @param coord coordonnées de la case à activer
+     * @param nbPionsNoirs nombre de pions noirs si cette action était jouée
+     * @param nbPionsBlancs nombre de pions blancs si cette action était jouée
+     * @return la chaîne codant cette action-mesure
+     */
+    static String chaineActionFusion(Coordonnees coord,
+            int nbPionsNoirs, int nbPionsBlancs) {
+        return "F" + coord.carLigne() + coord.carColonne() + ","
+                + nbPionsNoirs + "," + nbPionsBlancs;
+    }
+    /**
      * Nombre de Pions de la couleur opposé détruits lors de l'activation d'une tour
      * @param plateau le plateau
      * @param coord les coordonnées de la tour activée
@@ -134,7 +195,7 @@ public class JoueurTowa implements IJoueurTowa {
     static int nbPionsDetruits(Case [][] plateau,Coordonnees coord, boolean estNoir){
         Coordonnees vois [];
         Case c =plateau[coord.ligne][coord.colonne];
-        vois = coord.voisinesDiagonale();
+        vois = coord.voisinesDirection(Direction.diagonales());
         int nbPionsVoisin=0;
         for (Coordonnees val : vois) {
                 if (val!=null && plateau[val.ligne][val.colonne].tourPresente 
@@ -159,7 +220,50 @@ public class JoueurTowa implements IJoueurTowa {
         }
     return nbPionsVoisin+nbPionsSuivant;
     }
-    
+    /**
+     * Nombre de Pions de la couleur détruits lors de la fusion
+     * @param plateau le plateau
+     * @param coord les coordonnées de la tour activée
+     * @param estNoir la couleur de la tour activée
+     * @return le nombre de bion a enlevé
+     */
+    static int nbPionsRecuperes(Case [][] plateau,Coordonnees coord, boolean estNoir){
+        Coordonnees vois [];
+        Case c =plateau[coord.ligne][coord.colonne];
+        vois = coord.voisinesDirection(Direction.diagonales());
+        int nbPionsVoisin=0;
+        for (Coordonnees val : vois) {
+                if (val!=null && estNoir==plateau[val.ligne][val.colonne].estNoire){
+
+                    nbPionsVoisin+=plateau[val.ligne][val.colonne].hauteur;
+                }
+        }
+        Coordonnees premiere[];
+        premiere = coord.premiereSuivante(plateau);
+        int nbPionsSuivant= 0;
+        for (Coordonnees val : premiere) {
+            if (val!= null && estNoir==plateau[val.ligne][val.colonne].estNoire){
+                nbPionsSuivant+=plateau[val.ligne][val.colonne].hauteur;       
+           }
+        }
+        
+    return nbPionsVoisin+nbPionsSuivant;
+    }
+    /**
+     * Nombre de Pions de la couleur résultant de la fusion à supprimer
+     * @param plateau le plateau
+     * @param coord les coordonnées de la tour activée
+     * @param estNoir la couleur de la tour activée
+     * @return le nombre de bion a enlevé
+     */
+    static int nbPionsSupApresFusion(Case [][] plateau, Coordonnees coord, boolean estNoir){
+        int recup=nbPionsRecuperes(plateau, coord, estNoir);
+        Case c =plateau[coord.ligne][coord.colonne];
+        if (c.hauteur+recup>4){
+            return (recup+c.hauteur)-4;
+        }
+        return 0;
+    }
     /**
      * Booléen qui renvoi vrai ssi il existe une tour voisine de la couleur opposée
      * @param plateau le plateau
@@ -169,7 +273,7 @@ public class JoueurTowa implements IJoueurTowa {
     static boolean voisineEnemiePresente(Case[][] plateau, Coordonnees coord, boolean estNoir ){
         Case c= plateau[coord.ligne][coord.colonne];
         Coordonnees vois [];
-        vois = coord.voisines();
+        vois = coord.voisinesDirection(Direction.toutes());
         boolean tourPresente=false;
         for (Coordonnees val : vois) {
             if( val!=null && plateau[val.ligne][val.colonne].tourPresente && (plateau[val.ligne][val.colonne].estNoire==!estNoir)){
@@ -179,30 +283,5 @@ public class JoueurTowa implements IJoueurTowa {
     return tourPresente;    
     }
    
-    /**
-     * Chaîne de caractères correspondant à une action-mesure d'activation d'une tour.
-     *
-     * @param coord coordonnées de la case à activer
-     * @param nbPionsNoirs nombre de pions noirs si cette action était jouée
-     * @param nbPionsBlancs nombre de pions blancs si cette action était jouée
-     * @return la chaîne codant cette action-mesure
-     */
-    static String chaineActionActive(Coordonnees coord,
-            int nbPionsNoirs, int nbPionsBlancs) {
-        return "A" + coord.carLigne() + coord.carColonne() + ","
-                + nbPionsNoirs + "," + nbPionsBlancs;
-    }
-   
-    /**
-     * Indique s'il est possible d'activer une tour
-     *
-     * @param plateau le plateau
-     * @param coord coordonnées de la case à considérer
-     * @param estNoir vrai ssi il s'agit du joueur noir
-     * @return vrai ssi l'activation d'une tour est possible
-     */
-    boolean activeTourPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
-        Case c =plateau[coord.ligne][coord.colonne];
-        return ((c.tourPresente) && (c.estNoire == estNoir));        
-    }
+    
 }
