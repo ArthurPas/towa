@@ -60,7 +60,21 @@ public class CoordonneesTest {
         assertEquals('B', (new Coordonnees(0, 1)).carColonne());
         assertEquals('P', (new Coordonnees(5, 15)).carColonne());
     }
-
+    /**
+     * Test de carBord pour les différents bords
+     */
+    @Test
+    public void testCarBord() {
+        Coordonnees coord;
+        coord = Coordonnees.depuisCars('a', 'D');
+        assertEquals('N', coord.carBord(2));
+        coord = Coordonnees.depuisCars('b', 'A');
+        assertEquals('O', coord.carBord(0));
+        coord = Coordonnees.depuisCars('p', 'E');
+        assertEquals('S', coord.carBord(3));
+        coord = Coordonnees.depuisCars('e', 'P');
+        assertEquals('E', coord.carBord(1));
+    }
     /**
      * Test de carColonne pour un argument trop petit.
      */
@@ -139,5 +153,22 @@ public class CoordonneesTest {
         assertEquals(16, Coordonnees.NB_COLONNES);
         assertEquals('a', Coordonnees.CAR_PREMIERE_LIGNE);
         assertEquals('A', Coordonnees.CAR_PREMIERE_COLONNE);
+    }
+    /**
+     * Test du booleen qui verifie si des coordonnees sont sur un bord
+     */
+    @Test
+    public void testEstBord() {
+        Coordonnees coord;
+        coord = Coordonnees.depuisCars('a', 'D');
+        assertEquals(true, coord.estBord(coord));
+        coord = Coordonnees.depuisCars('p', 'D');
+        assertEquals(true, coord.estBord(coord));
+        coord = Coordonnees.depuisCars('b','E');
+        assertEquals(false, coord.estBord(coord));
+        coord = Coordonnees.depuisCars('d', 'A');
+        assertEquals(true, coord.estBord(coord));
+        coord = Coordonnees.depuisCars('d', 'P');
+        assertEquals(true, coord.estBord(coord));
     }
 }

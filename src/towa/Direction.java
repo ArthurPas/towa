@@ -33,6 +33,15 @@ enum Direction {
         return dir;
     }
     /**
+     * Renvoie le SUD dans un tableau.
+     *
+     * @return tableau contenant les quatre directions cardinales.
+     */
+    static Direction[] cardinalesSud() {
+        Direction[] dir = {SUD};
+        return dir;
+    }
+    /**
      * Renvoie les quatre directions diagonales dans un tableau.
      *
      * @return tableau contenant les quatre directions cardinales.

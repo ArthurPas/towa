@@ -91,7 +91,27 @@ class Coordonnees {
         }
         return (char) (CAR_PREMIERE_COLONNE + colonne);
     }
-
+    /**
+     * Renvoie le caractère correspondant au bord
+     * 
+     * @return le caractère correspondant au bord
+     */
+    char carBord(int indice){
+        char bord;
+        if(indice==1){
+            return bord='O';
+        }
+        if(indice==4){
+            return bord='E';
+        }
+        if(indice==2){
+            return bord='N';
+        }
+        if(indice==3){
+            return bord='S';
+        }
+        return bord='A';
+    }
     /**
      * Convertit un nom de ligne (par exemple 'c') en numéro de ligne (ici 2).
      *
@@ -147,9 +167,16 @@ class Coordonnees {
      */
     boolean estDansPlateau() {
         return(ligne>=0 && ligne<NB_LIGNES && colonne>=0 && colonne<NB_COLONNES);
-        
+    /**
+     * Indique si ces coordonnées sont dans le plateau.
+     *
+     * @return vrai ssi ces coordonnées sont dans le plateau
+     */    
     }
-
+    boolean estBord(Coordonnees coord){
+        return(coord.ligne==0 || coord.colonne==0 || coord.colonne==NB_COLONNES-1 
+                || coord.ligne==NB_LIGNES-1);
+    }
 
     /**
      * Retourne les coordonnées de toutes les cases voisines dans une direction 
@@ -215,7 +242,31 @@ class Coordonnees {
         }
         return premiereTour;
     }
-       
+    /**
+     * Retourne les coordonnées de la première tour trouvée (si elle existe) dans 
+     * une des direction
+     * @param plateau le plateau
+     * @return un tableau de 4 coordonnées
+     */
+    Coordonnees[] premiereSuivanteDirection(Case [][] plateau, Direction directionASuivre){
+        Coordonnees[] premiereTour =new Coordonnees[4];
+        int j=0;
+            boolean tourTrouve=false;
+            int i=1;
+            while(i<=NB_LIGNES && !tourTrouve){
+                Coordonnees s = suivante(directionASuivre, i);               
+                if(s.estDansPlateau()) {
+                    if(plateau[s.ligne][s.colonne].tourPresente){
+                        premiereTour[j]=s;
+                        tourTrouve=true;
+                        j++;
+                    }
+                }
+                i++;    
+            
+        }
+        return premiereTour;
+    }   
     /**
      * Test d'égalité entre coordonnées.
      * 

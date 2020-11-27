@@ -83,11 +83,33 @@ public class JoueurTowa implements IJoueurTowa {
                     }
                 nbActions++;
                 }
+                if(chatPossible(coord)){
+                    
+                    if(joueurNoir){
+                        
+                        for (int i = 1; i < 5; i++) {
+                            int nbNoirDetruit = nbPionsSupNoirApresChat(plateau, coord, true, i);
+                            int nbBlancsDetruit = nbPionsSupNoirApresChat(plateau, coord, false, i);
+                            actions[nbActions] = chaineActionChat(coord, nbPionsNoirs-nbNoirDetruit, nbPionsBlancs-nbBlancsDetruit,i);
+                            nbActions++;
+                        }
+                    }
+                    else{
+                        for (int i = 1; i < 5; i++) {
+                            int nbNoirDetruit = nbPionsSupNoirApresChat(plateau, coord, true, i);
+                            int nbBlancsDetruit = nbPionsSupNoirApresChat(plateau, coord, false, i);
+                            actions[nbActions] = chaineActionChat(coord, nbPionsNoirs-nbNoirDetruit, nbPionsBlancs-nbBlancsDetruit,i);
+                            nbActions++;
+                            
+                        }
+                    }
+                nbActions++;
+                }
             }
         }
         System.out.println("actionsPossibles : fin");
         return Utils.nettoyerTableau(actions);
-        }
+    }
     
     /**
      * Indique s'il est possible de poser un pion sur une case pour ce plateau,
@@ -127,6 +149,17 @@ public class JoueurTowa implements IJoueurTowa {
     boolean fusionTourPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
         Case c =plateau[coord.ligne][coord.colonne];
         return ((c.tourPresente) && (c.estNoire == estNoir));        
+    }
+    /**
+     * Indique s'il est possible d'actionner un chaton kamikaze
+     *
+     * @param plateau le plateau
+     * @param coord coordonnées de la case à considérer
+     * @param estNoir vrai ssi il s'agit du joueur noir
+     * @return vrai ssi l'activation d'une tour est possible
+     */
+    boolean chatPossible(Coordonnees coord) {
+        return (coord.estBord(coord));        
     }
     /**
      * Nombre de pions d'une couleur donnée sur le plateau.
@@ -186,10 +219,26 @@ public class JoueurTowa implements IJoueurTowa {
                 + nbPionsNoirs + "," + nbPionsBlancs;
     }
     /**
+     * Chaîne de caractères correspondant à une action-mesure d'activation d'un 
+     * chaton kamikaze
+     *
+     * @param coord coordonnées de la case à activer
+     * @param nbPionsNoirs nombre de pions noirs si cette action était jouée
+     * @param nbPionsBlancs nombre de pions blancs si cette action était jouée
+     * @param i l'indince de du bord
+     * @return la chaîne codant cette action-mesure
+     */
+    static String chaineActionChat(Coordonnees coord,
+            int nbPionsNoirs, int nbPionsBlancs, int i) {
+        return "C" + coord.carBord(i)+ ","
+                + nbPionsNoirs + "," + nbPionsBlancs;
+    }
+    /**
      * Nombre de Pions de la couleur opposé détruits lors de l'activation d'une tour
      * @param plateau le plateau
      * @param coord les coordonnées de la tour activée
      * @param estNoir la couleur de la tour activée
+     * @param i l'indince de du bord
      * @return le nombre de bion a enlevé
      */
     static int nbPionsDetruits(Case [][] plateau,Coordonnees coord, boolean estNoir){
@@ -229,7 +278,6 @@ public class JoueurTowa implements IJoueurTowa {
      */
     static int nbPionsRecuperes(Case [][] plateau,Coordonnees coord, boolean estNoir){
         Coordonnees vois [];
-        Case c =plateau[coord.ligne][coord.colonne];
         vois = coord.voisinesDirection(Direction.diagonales());
         int nbPionsVoisin=0;
         for (Coordonnees val : vois) {
@@ -260,18 +308,168 @@ public class JoueurTowa implements IJoueurTowa {
         int recup=nbPionsRecuperes(plateau, coord, estNoir);
         Case c =plateau[coord.ligne][coord.colonne];
         if (c.hauteur+recup>4){
-            return (recup+c.hauteur)-4;
+            return (recup+c.hauteur)-4; // 4 étant la hauteur maxiamle d'une tour
         }
         return 0;
     }
     /**
+     * Nombre de Pions à supprimer par le chaton kamikaze pour les noirs
+     * @param plateau le plateau
+     * @param coord les coordonnées du bord
+     * @param estNoir la couleur des pions a detruire
+     * @param i l'indince de du bord
+     * @return le nombre de bion a enlevé
+     */
+    static int nbPionsSupNoirApresChat(Case [][] plateau, Coordonnees coord, boolean estNoir, int i){
+        int detruitsNoirs=0;
+        Coordonnees [] premiere;
+        // rappel 2=Nord, 3=Sud, 4=Est, 1=Ouest
+
+        switch(i){
+            case 2:
+                for (int j = 0; j < Coordonnees.NB_COLONNES; j++) {
+                    coord.ligne=-1;
+                    coord.colonne=j;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.SUD);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsNoirs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+                        
+                    }
+                    
+                }   
+                break;
+            case 3:
+                for (int j = 0; j < Coordonnees.NB_COLONNES; j++) {
+                    coord.ligne=Coordonnees.NB_LIGNES;
+                    coord.colonne=j;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.NORD);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsNoirs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+                        
+                    }
+                    
+                }   
+                break;
+            case 4:
+                for (int j = 0; j < Coordonnees.NB_LIGNES; j++) {
+                    coord.ligne=j;
+                    coord.colonne=Coordonnees.NB_COLONNES;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.OUEST);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsNoirs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+
+                    }
+
+                }
+                break;
+            case 1:
+                for (int j = 0; j < Coordonnees.NB_LIGNES; j++) {
+                    coord.ligne=j;
+                    coord.colonne=-1;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.EST);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsNoirs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+
+                    }
+
+                }
+                break;
+            default:
+                break;
+        }
+        return detruitsNoirs;
+    }
+        
+     /**
+     * Nombre de Pions à supprimer par le chaton kamikaze pour les noirs
+     * @param plateau le plateau
+     * @param coord les coordonnées du bord
+     * @param estNoir la couleur la couleur des pions a detruire
+     * @param i l'indice du bord
+     * @return le nombre de bion a enlevé
+     */
+    static int nbPionsSupBlancApresChat(Case [][] plateau, Coordonnees coord, boolean estNoir, int i){
+        int detruitsBlancs=0;
+        Coordonnees [] premiere;
+        // rappel 2=Nord, 3=Sud, 4=Est, 1=Ouest
+        switch(i){
+            case 2:
+                for (int j = 0 ;  j< Coordonnees.NB_COLONNES; j++) {
+                    coord.ligne=-1;
+                    coord.colonne=j;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.SUD);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsBlancs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+                        
+                    }
+                    
+                }   
+                break;
+            case 3:
+                for (int j =0; j < Coordonnees.NB_COLONNES; j++) {
+                    coord.ligne=Coordonnees.NB_LIGNES;
+                    coord.colonne=j;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.NORD);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsBlancs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+
+                    }
+
+                }
+                break;
+            case 4:
+                for (int j = 0; j < Coordonnees.NB_LIGNES; j++) {
+                    coord.ligne=j;
+                    coord.colonne=Coordonnees.NB_COLONNES;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.OUEST);
+                    for (Coordonnees val : premiere){
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsBlancs+=plateau[val.ligne][val.colonne].hauteur;
+                        }
+
+                    }
+
+                }
+                break;
+            case 1:
+                for (int j = 0; j < Coordonnees.NB_LIGNES; j++) {
+                    coord.ligne=j;
+                    coord.colonne=-1;
+                    premiere = coord.premiereSuivanteDirection(plateau,Direction.EST);
+                    for (Coordonnees val : premiere) {
+                        if (val!=null && plateau[val.ligne][val.colonne].estNoire==estNoir ){
+                            detruitsBlancs+=plateau[val.ligne][val.colonne].hauteur;
+                        } 
+                    }
+
+                }
+                break;
+            default:
+                break;
+        }
+        
+//        }
+        return detruitsBlancs;
+    }
+    /**
      * Booléen qui renvoi vrai ssi il existe une tour voisine de la couleur opposée
      * @param plateau le plateau
-     * @param coord les coordonnées de la case 
+     * @param coord les coordonnées de la case
      * @param estNoir la couleur du joueur
      */
     static boolean voisineEnemiePresente(Case[][] plateau, Coordonnees coord, boolean estNoir ){
-        Case c= plateau[coord.ligne][coord.colonne];
         Coordonnees vois [];
         vois = coord.voisinesDirection(Direction.toutes());
         boolean tourPresente=false;
