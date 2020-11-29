@@ -41,7 +41,7 @@ public class JoueurTowa implements IJoueurTowa {
                     // on ajoute l'action dans les actions possible
                     
                     if(joueurNoir){
-                        if(!(plateau[coord.ligne][coord.colonne].tourPresente) && (voisineEnemiePresente(plateau, coord, joueurNoir))){
+                        if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
                             actions[nbActions] = chaineActionPose(coord, nbPionsNoirs + 2, nbPionsBlancs);
                         }
                         else{
@@ -50,7 +50,7 @@ public class JoueurTowa implements IJoueurTowa {
                         }
                     }
                     else{
-                        if(!(plateau[coord.ligne][coord.colonne].tourPresente)&& (voisineEnemiePresente(plateau, coord, joueurNoir))){
+                        if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
                              actions[nbActions] = chaineActionPose(coord, nbPionsNoirs, nbPionsBlancs+2);
                         }
                         else{
@@ -113,7 +113,7 @@ public class JoueurTowa implements IJoueurTowa {
     
     /**
      * Indique s'il est possible de poser un pion sur une case pour ce plateau,
-     * ce joueur, dans ce niveau (niveau 3).
+     * ce joueur, dans ce niveau (niveau 10).
      *
      * @param plateau le plateau
      * @param coord coordonnées de la case à considérer
@@ -123,7 +123,46 @@ public class JoueurTowa implements IJoueurTowa {
      */
     boolean posePossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
         Case c =plateau[coord.ligne][coord.colonne];
-        return ((c.tourPresente) && (c.estNoire == estNoir) && (c.hauteur<4)|| (!c.tourPresente));
+        if(c.tourPresente){
+            if(voisineEnemiePresente(plateau, coord, estNoir)){
+                if(c.estNoire == estNoir && (c.hauteur+c.altitude)<4){
+                return true;
+                }
+            }
+           if(c.estNoire == estNoir && (c.hauteur+c.altitude)<4){
+               return true;
+           } 
+               
+        }
+        else{
+            if(voisineEnemiePresente(plateau, coord, estNoir)){
+                if(c.altitude==3){
+                    return false;
+                }
+                if(c.altitude<3){
+                    return true;
+                }
+            }
+            if(c.altitude<4){
+               return true;
+            }
+            
+        }
+        return false;
+    }
+    /**
+     * Indique s'il est possible de poser deux pion sur une case pour ce plateau,
+     * ce joueur
+     *
+     * @param plateau le plateau
+     * @param coord coordonnées de la case à considérer
+     * @param estNoir vrai ssi il s'agit du joueur noir
+     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce
+     * niveau
+     */
+    boolean poseDeDeuxPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
+        Case c =plateau[coord.ligne][coord.colonne];
+        return((!c.tourPresente)&& (c.altitude<3)&& (voisineEnemiePresente(plateau, coord, estNoir)));
        
     }
     /**
@@ -247,9 +286,11 @@ public class JoueurTowa implements IJoueurTowa {
         vois = coord.voisinesDirection(Direction.diagonales());
         int nbPionsVoisin=0;
         for (Coordonnees val : vois) {
-                if (val!=null && plateau[val.ligne][val.colonne].tourPresente 
-                        && c.hauteur > plateau[val.ligne][val.colonne].hauteur && 
-                        estNoir!=plateau[val.ligne][val.colonne].estNoire){
+                if (((val!=null && plateau[val.ligne][val.colonne].tourPresente 
+                        && (c.hauteur+c.altitude) > 
+                        (plateau[val.ligne][val.colonne].hauteur + 
+                        plateau[val.ligne][val.colonne].altitude)
+                        && estNoir!=plateau[val.ligne][val.colonne].estNoire))){
 
                     nbPionsVoisin+=plateau[val.ligne][val.colonne].hauteur;
                 }
@@ -258,8 +299,10 @@ public class JoueurTowa implements IJoueurTowa {
         premiere = coord.premiereSuivante(plateau);
         int nbPionsSuivant= 0;
         for (Coordonnees val : premiere) {
-            if (val!= null && c.hauteur > plateau[val.ligne][val.colonne].hauteur && 
-                    estNoir!=plateau[val.ligne][val.colonne].estNoire){
+            if (val!= null  && (c.hauteur+c.altitude) > 
+                        (plateau[val.ligne][val.colonne].hauteur + 
+                        plateau[val.ligne][val.colonne].altitude)
+                        && estNoir!=plateau[val.ligne][val.colonne].estNoire){
                     
                 nbPionsSuivant+=plateau[val.ligne][val.colonne].hauteur;
                    
@@ -307,8 +350,8 @@ public class JoueurTowa implements IJoueurTowa {
     static int nbPionsSupApresFusion(Case [][] plateau, Coordonnees coord, boolean estNoir){
         int recup=nbPionsRecuperes(plateau, coord, estNoir);
         Case c =plateau[coord.ligne][coord.colonne];
-        if (c.hauteur+recup>4){
-            return (recup+c.hauteur)-4; // 4 étant la hauteur maxiamle d'une tour
+        if ((c.hauteur+c.altitude)+recup>4){
+            return (recup+c.hauteur+c.altitude)-4; // 4 étant la hauteur maxiamle d'une tour
         }
         return 0;
     }
@@ -469,12 +512,14 @@ public class JoueurTowa implements IJoueurTowa {
      * @param coord les coordonnées de la case
      * @param estNoir la couleur du joueur
      */
-    static boolean voisineEnemiePresente(Case[][] plateau, Coordonnees coord, boolean estNoir ){
+    static boolean voisineEnemiePresente(Case[][] plateau, Coordonnees coord, 
+            boolean estNoir ){
         Coordonnees vois [];
         vois = coord.voisinesDirection(Direction.toutes());
         boolean tourPresente=false;
         for (Coordonnees val : vois) {
-            if( val!=null && plateau[val.ligne][val.colonne].tourPresente && (plateau[val.ligne][val.colonne].estNoire==!estNoir)){
+            if( val!=null && plateau[val.ligne][val.colonne].tourPresente 
+                    && (plateau[val.ligne][val.colonne].estNoire==!estNoir)){
                 tourPresente=true;
             }
         }

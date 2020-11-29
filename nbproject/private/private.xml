@@ -1,11 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
-    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="2">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="3">
         <file>
             <url>src/towa/Coordonnees.java</url>
             <bookmark id="1">
                 <name/>
-                <line>213</line>
+                <line>225</line>
+                <key/>
+            </bookmark>
+        </file>
+        <file>
+            <url>test/towa/JoueurTowaTest.java</url>
+            <bookmark id="3">
+                <name/>
+                <line>352</line>
                 <key/>
             </bookmark>
         </file>
@@ -13,7 +21,7 @@
             <url>src/towa/Direction.java</url>
             <bookmark id="2">
                 <name/>
-                <line>45</line>
+                <line>41</line>
                 <key/>
             </bookmark>
         </file>
@@ -21,10 +29,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/Coordonnees.java</file>
+            <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/Case.java</file>
             <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/JoueurTowa.java</file>
+            <file>file:/Users/arthur/NetBeansProjects/Towa/test/towa/CoordonneesTest.java</file>
             <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/Direction.java</file>
             <file>file:/Users/arthur/NetBeansProjects/Towa/test/towa/JoueurTowaTest.java</file>
-            <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/Utils.java</file>
+            <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/IJoueurTowa.java</file>
         </group>
     </open-files>
 </project-private>
