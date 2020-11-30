@@ -24,8 +24,9 @@ public class JoueurTowaTest {
 //        testActionsPossibles_niveau6();
 //        testActionsPossibles_niveau7();
 //        testActionsPossibles_niveau8();
-//        testActionPossible_niveau9();
-        testActionsPossibles_niveau10();
+//        testActionsPossibles_niveau9();
+//        testActionsPossibles_niveau10();
+        testActionsPossibles_niveau11();
     }
 
     /**
@@ -375,6 +376,38 @@ public class JoueurTowaTest {
         assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
                 JoueurTowa.chaineActionActive(coord, nbPionsNoir, nbPionsBlancs-nbPionsBlancsAEnlever))));
     }
+    @Test 
+    public void testActionsPossibles_niveau11(){
+        JoueurTowa joueur = new JoueurTowa();
+        Case[][] plateau = Utils.plateauDepuisTexte(PLATEAU_NIVEAU11);
+        boolean estNoir = false; // nous jouons le joueur blanc pour ce test
+        int niveau = 11;
+        int nbPionsNoir = JoueurTowa.nbPions(plateau, true);
+        int nbPionsBlancs = JoueurTowa.nbPions(plateau, false);
+        
+        String[] actionsPossibles = joueur.actionsPossibles(plateau, estNoir, niveau);
+        Coordonnees coord;
+        //magie de la tour gH
+        coord = Coordonnees.depuisCars('g', 'H');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+        //magie de la tour iG
+        coord = Coordonnees.depuisCars('i', 'G');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+        //magie de la tour iH : imposible 
+        coord = Coordonnees.depuisCars('i', 'H');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+        //magie de la tour eJ : imposible 
+        coord = Coordonnees.depuisCars('e', 'J');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+        //magie de la tour aA : imposible 
+        coord = Coordonnees.depuisCars('a', 'A');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+    }
     @Test
     public void testNbPions() {
         
@@ -720,6 +753,40 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "p|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+";
-    
+    final String PLATEAU_NIVEAU11
+            =" A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P \n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "a|B13|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "b|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "c|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "d|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "e|   |   |   |   |   |   |   |   |   |B13|   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "f|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "g|   |   |   |   |   |   |   |B12|   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "h|   |   |   |   |   |  3|   |   |N1 |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "i|   |   |   |   |   |   |B1 |B2 |   |   |B2 |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "j|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "k|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "l|   |   |   |   |   |   |B1 |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "m|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "n|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "o|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "p|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |  4|\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+";
 }
 

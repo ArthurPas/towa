@@ -171,4 +171,22 @@ public class CoordonneesTest {
         coord = Coordonnees.depuisCars('d', 'P');
         assertEquals(true, coord.estBord(coord));
     }
+    /**
+     * Test des cases symetriques
+     */
+     @Test
+    public void testCaseSymetrique() {
+        Coordonnees coord;
+        coord = Coordonnees.depuisCars('a', 'A');
+        assertEquals(Coordonnees.depuisCars('p', 'P'),coord.coordSymetrique(coord));
+        coord = Coordonnees.depuisCars('a', 'P');
+        assertEquals(Coordonnees.depuisCars('p', 'A'),coord.coordSymetrique(coord));
+        coord = Coordonnees.depuisCars('h', 'I');
+        assertEquals(Coordonnees.depuisCars('i', 'H'),coord.coordSymetrique(coord));
+        coord = Coordonnees.depuisCars('g', 'H');
+        assertEquals(Coordonnees.depuisCars('j', 'I'),coord.coordSymetrique(coord));
+        coord = Coordonnees.depuisCars('h', 'H');
+        assertEquals(Coordonnees.depuisCars('i', 'I'),coord.coordSymetrique(coord));
+        
+    }
 }

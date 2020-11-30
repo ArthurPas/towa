@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="0" failures="0" hostname="macbook-air-de-arthur.home" name="towa.JoueurTowaTest" skipped="0" tests="1" time="0.211" timestamp="2020-11-30T12:49:21">
+<testsuite errors="0" failures="0" hostname="macbook-air-de-arthur.home" name="towa.CoordonneesTest" skipped="0" tests="1" time="0.171" timestamp="2020-11-30T13:20:57">
   <properties>
     <property name="libs.spring-framework300.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/org-apache-commons-logging.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/cglib-2.2.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-aop-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-aspects-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-beans-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-context-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-context-support-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-core-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-expression-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-instrument-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-instrument-tomcat-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-jdbc-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-jms-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-orm-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-oxm-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-struts-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-test-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-tx-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-web-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-webmvc-3.2.18.RELEASE.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-3.0/spring-webmvc-portlet-3.2.18.RELEASE.jar" />
     <property name="javac.test.classpath" value=":build/classes:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/ext/hamcrest-core-1.3.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/ext/junit-4.12.jar" />
@@ -19,7 +19,7 @@
     <property name="libs.jsp-compilation.src" value="" />
     <property name="libs.JWSAntTasks.javadoc" value="" />
     <property name="sun.boot.library.path" value="/Library/Java/JavaVirtualMachines/jdk-15.0.1.jdk/Contents/Home/lib" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner towa.JoueurTowaTest methods=testActionsPossibles_niveau11 skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/arthur/NetBeansProjects/Towa/build/test/results/TEST-towa.JoueurTowaTest.xml crashfile=/Users/arthur/NetBeansProjects/Towa/build/junitvmwatcher2137782570235938487.properties propsfile=/Users/arthur/NetBeansProjects/Towa/build/junit7490090438544950983.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner towa.CoordonneesTest methods=testCaseSymetrique skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/Users/arthur/NetBeansProjects/Towa/build/test/results/TEST-towa.CoordonneesTest.xml crashfile=/Users/arthur/NetBeansProjects/Towa/build/junitvmwatcher17239321611937337521.properties propsfile=/Users/arthur/NetBeansProjects/Towa/build/junit10531405469218514877.properties" />
     <property name="jdk.debug" value="release" />
     <property name="libs.spring-framework300.src" value="" />
     <property name="javadoc.use" value="true" />
@@ -199,7 +199,7 @@
     <property name="libs.jsp-compilation-syscp.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/servlet3.1-jsp2.3-api.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/glassfish-jspparser-4.0.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/jstl-impl.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/jsf-2_2/javax.faces.jar" />
     <property name="libs.jsp-compilation.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/servlet3.1-jsp2.3-api.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/glassfish-jspparser-4.0.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/jsf-2_2/javax.faces.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/jstl-api.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant-launcher.jar" />
     <property name="libs.javaee-api-6.0.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/javaee-api-6.0.jar" />
-    <property name="javac.includesfile.binary" value="/Users/arthur/NetBeansProjects/Towa/null873746119" />
+    <property name="javac.includesfile.binary" value="/Users/arthur/NetBeansProjects/Towa/null1647490769" />
     <property name="libs.javaee-api-7.0.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/modules/ext/javaee-api-7.0.jar" />
     <property name="libs.restapi.maven-pom" value="" />
     <property name="javadoc.preview" value="true" />
@@ -318,13 +318,13 @@
     <property name="netbeans.autoupdate.version" value="1.23" />
     <property name="empty.dir" value="/Users/arthur/NetBeansProjects/Towa/build/empty" />
     <property name="netbeans.user" value="/Users/arthur/Library/Application Support/NetBeans/12.1" />
-    <property name="javac.includes.binary" value="/Users/arthur/NetBeansProjects/Towa/build/test/classes/towa/JoueurTowaTest.class" />
+    <property name="javac.includes.binary" value="/Users/arthur/NetBeansProjects/Towa/build/test/classes/towa/CoordonneesTest.class" />
     <property name="file.separator" value="/" />
     <property name="line.separator" value="&#xa;" />
     <property name="javadoc.additionalparam" value="" />
     <property name="jnlp.signed" value="false" />
     <property name="libs.spring-webmvc5.0.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/java/modules/ext/spring-5/spring-webmvc-5.2.2.RELEASE.jar" />
-    <property name="test.method" value="testActionsPossibles_niveau11" />
+    <property name="test.method" value="testCaseSymetrique" />
     <property name="javac.debug" value="true" />
     <property name="libs.restlib.maven-pom" value="" />
     <property name="libs.testng.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/ext/testng-6.8.1-dist.jar" />
@@ -360,7 +360,7 @@
     <property name="libs.spring-framework500.src" value="" />
     <property name="user.properties.file" value="/Users/arthur/Library/Application Support/NetBeans/12.1/build.properties" />
     <property name="libs.javaee-api-6.0.src" value="" />
-    <property name="javac.includes" value="towa/JoueurTowaTest.java" />
+    <property name="javac.includes" value="towa/CoordonneesTest.java" />
     <property name="netbeans.autoupdate.country" value="FR" />
     <property name="java.class.path" value="/Users/arthur/NetBeansProjects/Towa/build/classes:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/ext/hamcrest-core-1.3.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/platform/modules/ext/junit-4.12.jar:/Users/arthur/NetBeansProjects/Towa/build/test/classes:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant-launcher.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant-junit.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/extide/ant/lib/ant-junit4.jar" />
     <property name="libs.javaee-web-api-6.0.maven-pom" value="" />
@@ -411,7 +411,7 @@
     <property name="java.vm.version" value="15.0.1+9-18" />
     <property name="manifest.custom.codebase" value="" />
     <property name="libs.metro.javadoc" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/docs/webservices-api-javadoc.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/docs/webservices-extra-javadoc.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/docs/webservices-extra-api-javadoc.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/docs/webservices-rt-javadoc.jar:/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/docs/webservices-tools-javadoc.jar" />
-    <property name="test.class" value="towa.JoueurTowaTest" />
+    <property name="test.class" value="towa.CoordonneesTest" />
     <property name="sun.awt.datatransfer.timeout" value="1000" />
     <property name="libs.javaee-web-api-7.0.src" value="" />
     <property name="annotation.processing.run.all.processors" value="true" />
@@ -419,9 +419,7 @@
     <property name="libs.jakartaee-api-8.0.src" value="" />
     <property name="libs.jsp-compiler.classpath" value="/Applications/NetBeans/Apache NetBeans 12.1.app/Contents/Resources/NetBeans/netbeans/enterprise/ant/extra/jspcompile.jar" />
   </properties>
-  <testcase classname="towa.JoueurTowaTest" name="testActionsPossibles_niveau11" time="0.045" />
-  <system-out><![CDATA[actionsPossibles : lancement le 30/11/2020 13:49:21.838
-actionsPossibles : fin
-]]></system-out>
+  <testcase classname="towa.CoordonneesTest" name="testCaseSymetrique" time="0.005" />
+  <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

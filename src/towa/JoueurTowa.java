@@ -39,7 +39,6 @@ public class JoueurTowa implements IJoueurTowa {
                 // si la pose d'un pion de cette couleur est possible sur cette case
                 if (posePossible(plateau, coord, joueurNoir)) {
                     // on ajoute l'action dans les actions possible
-                    
                     if(joueurNoir){
                         if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
                             actions[nbActions] = chaineActionPose(coord, nbPionsNoirs + 2, nbPionsBlancs);
@@ -70,9 +69,8 @@ public class JoueurTowa implements IJoueurTowa {
                         actions[nbActions]= chaineActionActive(coord, nbPionsNoirs-nbPionsNoirsDetruits, nbPionsBlancs);
                     }
                 nbActions++;
-                
                 }
-                if(fusionTourPossible(plateau, coord, joueurNoir)){
+                if (fusionTourPossible(plateau, coord, joueurNoir)){
                     int nbNoirsApresFusion = nbPionsSupApresFusion(plateau, coord, true);
                     int nbBlancsApresFusion = nbPionsSupApresFusion(plateau, coord, false);
                     if(joueurNoir){
@@ -83,8 +81,16 @@ public class JoueurTowa implements IJoueurTowa {
                     }
                 nbActions++;
                 }
+                if(magiePossible(plateau, coord, joueurNoir)){
+                    if(joueurNoir){
+                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
+                    }
+                    else{
+                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
+                    }
+                nbActions++;
+                }
                 if(chatPossible(coord)){
-                    
                     if(joueurNoir){
                         
                         for (int i = 1; i < 5; i++) {
@@ -157,12 +163,13 @@ public class JoueurTowa implements IJoueurTowa {
      * @param plateau le plateau
      * @param coord coordonnées de la case à considérer
      * @param estNoir vrai ssi il s'agit du joueur noir
-     * @return vrai ssi la pose d'un pion sur cette case est autorisée dans ce
+     * @return vrai ssi la pose de deux pions sur cette case est autorisée dans ce
      * niveau
      */
     boolean poseDeDeuxPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
         Case c =plateau[coord.ligne][coord.colonne];
-        return((!c.tourPresente)&& (c.altitude<3)&& (voisineEnemiePresente(plateau, coord, estNoir)));
+        return((!c.tourPresente)&& (c.altitude<3)
+                && (voisineEnemiePresente(plateau, coord, estNoir)));
        
     }
     /**
@@ -183,7 +190,7 @@ public class JoueurTowa implements IJoueurTowa {
      * @param plateau le plateau
      * @param coord coordonnées de la case à considérer
      * @param estNoir vrai ssi il s'agit du joueur noir
-     * @return vrai ssi l'activation d'une tour est possible
+     * @return vrai ssi la fusion d'une tour est possible
      */
     boolean fusionTourPossible(Case[][] plateau, Coordonnees coord, boolean estNoir) {
         Case c =plateau[coord.ligne][coord.colonne];
@@ -191,14 +198,26 @@ public class JoueurTowa implements IJoueurTowa {
     }
     /**
      * Indique s'il est possible d'actionner un chaton kamikaze
+     * @param coord coordonnées de la case à considérer
+     * @return vrai ssi l'activation d'un chat est possible
+     */
+    boolean chatPossible(Coordonnees coord) {
+        return (Coordonnees.estBord(coord));        
+    }
+    /**
+     * Indique s'il est possible de faire de la magie sur une case
      *
      * @param plateau le plateau
      * @param coord coordonnées de la case à considérer
      * @param estNoir vrai ssi il s'agit du joueur noir
-     * @return vrai ssi l'activation d'une tour est possible
+     * @return vrai ssi la magie d'une tour est possible
      */
-    boolean chatPossible(Coordonnees coord) {
-        return (coord.estBord(coord));        
+    boolean magiePossible(Case[][] plateau,Coordonnees coord, boolean estNoir) {
+        Case c = plateau[coord.ligne][coord.colonne];
+        Case sym = plateau[Coordonnees.coordSymetrique(coord).ligne][Coordonnees.coordSymetrique(coord).colonne];
+        return (c.tourPresente && !(sym.tourPresente)
+                && (sym.altitude +c.hauteur <= 4)
+                && c.estNoire==estNoir);      
     }
     /**
      * Nombre de pions d'une couleur donnée sur le plateau.
@@ -270,6 +289,16 @@ public class JoueurTowa implements IJoueurTowa {
     static String chaineActionChat(Coordonnees coord,
             int nbPionsNoirs, int nbPionsBlancs, int i) {
         return "C" + coord.carBord(i)+ ","
+                + nbPionsNoirs + "," + nbPionsBlancs;
+    }
+    /**
+     * Chaîne de caractères correspondant à une action-mesure de Magie
+     *
+     * @param coord coordonnées de la case à teleporté
+     * @return la chaîne codant cette action-mesure
+     */
+    static String chaineActionMagie(Coordonnees coord,int nbPionsNoirs, int nbPionsBlancs){
+        return "M" + coord.carLigne() + coord.carColonne()+ ","
                 + nbPionsNoirs + "," + nbPionsBlancs;
     }
     /**

@@ -173,7 +173,7 @@ class Coordonnees {
      * @return vrai ssi ces coordonnées sont dans le plateau
      */    
     }
-    boolean estBord(Coordonnees coord){
+    static boolean estBord(Coordonnees coord){
         return(coord.ligne==0 || coord.colonne==0 || coord.colonne==NB_COLONNES-1 
                 || coord.ligne==NB_LIGNES-1);
     }
@@ -266,7 +266,20 @@ class Coordonnees {
             
         }
         return premiereTour;
-    }   
+    }
+    /**
+     * Retourne les coordonnées de la case symetrique par rapport aux coordonnées
+     * @param coord les coordonées de la case dont on cherche la symetrie
+     * @return un tableau de 4 coordonnées
+     */
+    static Coordonnees coordSymetrique(Coordonnees coord){
+       Coordonnees symetrie;
+       if (coord.estDansPlateau()){
+       symetrie =new Coordonnees (((NB_LIGNES-1)-coord.ligne),((NB_COLONNES-1)-coord.colonne));
+       return symetrie;
+       }
+       return null;
+    }
     /**
      * Test d'égalité entre coordonnées.
      * 

@@ -13,7 +13,7 @@
             <url>test/towa/JoueurTowaTest.java</url>
             <bookmark id="3">
                 <name/>
-                <line>352</line>
+                <line>353</line>
                 <key/>
             </bookmark>
         </file>
@@ -34,7 +34,6 @@
             <file>file:/Users/arthur/NetBeansProjects/Towa/test/towa/CoordonneesTest.java</file>
             <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/Direction.java</file>
             <file>file:/Users/arthur/NetBeansProjects/Towa/test/towa/JoueurTowaTest.java</file>
-            <file>file:/Users/arthur/NetBeansProjects/Towa/src/towa/IJoueurTowa.java</file>
         </group>
     </open-files>
 </project-private>
