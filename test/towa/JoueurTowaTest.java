@@ -26,7 +26,8 @@ public class JoueurTowaTest {
 //        testActionsPossibles_niveau8();
 //        testActionsPossibles_niveau9();
 //        testActionsPossibles_niveau10();
-        testActionsPossibles_niveau11();
+//        testActionsPossibles_niveau11();
+        testActionsPossibles_niveau12();
     }
 
     /**
@@ -409,6 +410,59 @@ public class JoueurTowaTest {
                 JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
     }
     @Test
+    public void testActionsPossibles_niveau12(){
+        JoueurTowa joueur = new JoueurTowa();
+        Case[][] plateau = Utils.plateauDepuisTexte(PLATEAU_NIVEAU12);
+        boolean estNoir = false; // nous jouons le joueur blanc pour ce test
+        int niveau = 12;
+        int nbPionsNoir = JoueurTowa.nbPions(plateau, true);
+        int nbPionsBlancs = JoueurTowa.nbPions(plateau, false);
+        String[] actionsPossibles = joueur.actionsPossibles(plateau, estNoir, niveau);
+        Coordonnees coord;
+        //Pose sur une case Terre vide à coté d'une case ennemie
+        coord = Coordonnees.depuisCars('a', 'A');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionPose(coord,nbPionsNoir,nbPionsBlancs+2))));
+        //Pose sur une case d'eau vide : impossible
+        coord = Coordonnees.depuisCars('h', 'H');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionPose(coord,nbPionsNoir,nbPionsBlancs+2))));
+        //magie vers une case d'eau : impossible
+        coord = Coordonnees.depuisCars('i', 'I');
+        assertFalse((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+        //magie vers une case d'eau : impossible
+        coord = Coordonnees.depuisCars('b', 'H');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+                JoueurTowa.chaineActionMagie(coord,nbPionsNoir,nbPionsBlancs))));
+    }
+     @Test
+    public void testActionsPossibles_niveau13(){
+        JoueurTowa joueur = new JoueurTowa();
+        Case[][] plateau = Utils.plateauDepuisTexte(PLATEAU_NIVEAU13);
+        boolean estNoir = true; 
+        int niveau = 13;
+        int nbPionsNoir = JoueurTowa.nbPions(plateau, true);
+        int nbPionsBlancs = JoueurTowa.nbPions(plateau, false);
+        String[] actionsPossibles = joueur.actionsPossibles(plateau, estNoir, niveau);
+        Coordonnees coord;
+        //Pose sur une case Terre d'altitude 1 qui fait que le plateau est couvrant 
+        coord = Coordonnees.depuisCars('a', 'D');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+        JoueurTowa.chaineActionPose(coord,nbPionsNoir+4,nbPionsBlancs))));
+        //pose sur une case couvrante d'altitute 2 
+        coord = Coordonnees.depuisCars('g', 'H');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+        JoueurTowa.chaineActionPose(coord,nbPionsNoir+2,nbPionsBlancs))));
+        //pose sur une case non couvrante d'altitute 2 et a coté d'une voisine 
+        //ennemie
+        coord = Coordonnees.depuisCars('g', 'H');
+        assertTrue((Utils.actionsPossiblesContient(actionsPossibles,
+        JoueurTowa.chaineActionPose(coord,nbPionsNoir+2,nbPionsBlancs))));
+//        // pose un plateau non couvrant
+    
+    }
+    @Test
     public void testNbPions() {
         
         // plateau1 : 0 noir, 0 blanc
@@ -423,10 +477,10 @@ public class JoueurTowaTest {
         Case[][] plateau7 = Utils.plateauDepuisTexte(PlATEAU_NIVEAU7);
         assertEquals(9, JoueurTowa.nbPions(plateau7, true));
         assertEquals(14, JoueurTowa.nbPions(plateau7, false));
-        //plateau 9 :
-         Case[][] plateau9 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU9);
-        assertEquals(17, JoueurTowa.nbPions(plateau9, true));
-        assertEquals(16, JoueurTowa.nbPions(plateau9, false));
+        //plateau 13 :
+         Case[][] plateau13= Utils.plateauDepuisTexte(PLATEAU_NIVEAU13);
+        assertEquals(36, JoueurTowa.nbPions(plateau13, true));
+        assertEquals(42, JoueurTowa.nbPions(plateau13, false));
     }
     @Test
     public void testNbPionsDetruits(){
@@ -474,7 +528,7 @@ public class JoueurTowaTest {
                 JoueurTowa.chaineActionActive(Coordonnees.depuisCars('p', 'P'), 10, 10));
     }
    @Test
-   public void testvoisineEnemieJoueurNoir(){
+   public void testVoisineEnemieJoueurNoir(){
        Case[][] plateau2 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU2);
        Coordonnees coord;
        //Tour blanche présente en jouant le noir
@@ -487,7 +541,7 @@ public class JoueurTowaTest {
        assertEquals(false,JoueurTowa.voisineEnemiePresente(plateau2, coord, true) );
    }
    @Test
-      public void testvoisineEnemieJoueurBlanc(){
+      public void testVoisineEnemieJoueurBlanc(){
        Case[][] plateau2 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU2);
        Coordonnees coord;
        //Tour blanche présente en jouant le blanc
@@ -499,6 +553,16 @@ public class JoueurTowaTest {
        coord = Coordonnees.depuisCars('e', 'E');
        assertEquals(false,JoueurTowa.voisineEnemiePresente(plateau2, coord, false) );
    }
+    @Test
+    public void testEstCouvrante(){
+        Case[][] plateau2 = Utils.plateauDepuisTexte(PLATEAU_NIVEAU13);
+       Coordonnees coord;
+       coord = Coordonnees.depuisCars('a', 'D');
+       assertEquals(true,JoueurTowa.estCouvrant(plateau2, coord, true));
+       coord = Coordonnees.depuisCars('b', 'D');
+       assertEquals(false,JoueurTowa.estCouvrant(plateau2, coord, false));
+       
+    }
     /**
      * Un plateau de base, sous forme de chaîne. Pour construire une telle
      * chaîne depuis votre sortie.log, déclarez simplement : final String
@@ -788,5 +852,78 @@ public class JoueurTowaTest {
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
             "p|   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |  4|\n" +
             " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+";
+    
+    final String PLATEAU_NIVEAU12
+            ="   A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P \n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "a|   |   |   |   |   |N4 |B1 |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "b|N1 |   |   |   |   |   |   |B1 |   |   |   |B1 |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "c|   |   |B1 |   |B1 |   |   |   |   |   |N1 |B1 |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "d|   |   |   |   |   |   |   |   |B1 |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "e|B1 |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "f|   |   |   |   |   |N2 |   |B11|   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+E--+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "g|   |   |B2 |   |   |   |   |  2|   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+E--+---+---+---+---+---+---+---+---+\n" +
+            "h|   |   |   |   |   |B4 |   |  3|  3|   |N1 |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "i|   |N1 |N1 |   |   |   |   |B22|B1 |   |   |   |N1 |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "j|   |   |   |   |   |   |N1 |   |N2 |   |   |B1 |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "k|   |   |   |   |N1 |   |   |   |   |N2 |   |   |   |   |B1 |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "l|N1 |N4 |   |   |N3 |   |B1 |   |   |   |   |   |   |   |   |N1 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "m|   |   |   |   |B1 |   |   |   |   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "n|   |   |   |   |N1 |N1 |N2 |   |   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "o|   |N1 |   |   |   |   |   |N1 |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "p|   |   |   |   |   |   |B1 |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+";
+    final String PLATEAU_NIVEAU13
+            ="  A   B   C   D   E   F   G   H   I   J   K   L   M   N   O   P \n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "a|   |B4 |   |   |   |   |N1 |   |   |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "b|N1 |   |   |   |   |   |   |B1 |   |B3 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "c|   |   |B1 |   |   |   |   |   |   |   |B1 |   |N1 |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "d|   |   |   |   |B1 |   |   |   |B1 |   |   |N2 |B4 |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "e|B1 |   |   |  1|   |   |   |N1 |   |   |   |   |   |B3 |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "f|   |   |   |   |   |N2 |   |B11|   |   |   |   |   |N1 |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "g|   |   |B2 |   |   |   |   |  2|   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "h|   |   |   |   |   |B4 |   |  3|  3|   |N1 |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "i|   |N1 |N1 |   |   |   |   |B22|B1 |   |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "j|   |   |   |   |   |   |N1 |   |N2 |   |   |B1 |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "k|   |   |   |   |N1 |   |   |   |   |N2 |   |B1 |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "l|N1 |N4 |   |   |N3 |   |B1 |   |   |   |   |   |   |   |B2 |N1 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "m|   |   |   |   |B1 |   |   |   |   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "n|   |   |   |B2 |N1 |N1 |   |   |   |N1 |   |   |   |   |   |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "o|   |N1 |   |   |   |   |   |N1 |   |   |   |   |   |   |   |B4 |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+\n" +
+            "p|   |   |   |   |   |   |B1 |   |   |   |   |   |   |   |N2 |   |\n" +
+            " +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+";
+
+            
 }
 

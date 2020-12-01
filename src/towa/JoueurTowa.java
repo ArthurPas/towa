@@ -35,12 +35,16 @@ public class JoueurTowa implements IJoueurTowa {
             // pour chaque colonne
             for (int col = 0; col < Coordonnees.NB_COLONNES; col++) {
                 Coordonnees coord = new Coordonnees(lig, col);
-                
                 // si la pose d'un pion de cette couleur est possible sur cette case
                 if (posePossible(plateau, coord, joueurNoir)) {
                     // on ajoute l'action dans les actions possible
                     if(joueurNoir){
-                        if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
+                        if(estCouvrant(plateau, coord, joueurNoir)){
+                            actions[nbActions] = chaineActionPose(coord, 
+                                    nbPionsNoirs+nbPionsApresMax(plateau, coord),
+                                    nbPionsBlancs);
+                        }
+                        else if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
                             actions[nbActions] = chaineActionPose(coord, nbPionsNoirs + 2, nbPionsBlancs);
                         }
                         else{
@@ -49,7 +53,12 @@ public class JoueurTowa implements IJoueurTowa {
                         }
                     }
                     else{
-                        if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
+                        if(estCouvrant(plateau, coord, joueurNoir)){
+                            actions[nbActions] = chaineActionPose(coord, 
+                                    nbPionsNoirs,
+                                    nbPionsBlancs+nbPionsApresMax(plateau, coord));
+                        }
+                        else if(poseDeDeuxPossible(plateau, coord, joueurNoir)){
                              actions[nbActions] = chaineActionPose(coord, nbPionsNoirs, nbPionsBlancs+2);
                         }
                         else{
@@ -70,6 +79,15 @@ public class JoueurTowa implements IJoueurTowa {
                     }
                 nbActions++;
                 }
+                if(magiePossible(plateau, coord, joueurNoir)){
+                    if(joueurNoir){
+                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
+                    }
+                    else{
+                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
+                    }
+                nbActions++;
+                }   
                 if (fusionTourPossible(plateau, coord, joueurNoir)){
                     int nbNoirsApresFusion = nbPionsSupApresFusion(plateau, coord, true);
                     int nbBlancsApresFusion = nbPionsSupApresFusion(plateau, coord, false);
@@ -78,15 +96,6 @@ public class JoueurTowa implements IJoueurTowa {
                     }
                     else{
                         actions[nbActions]= chaineActionFusion(coord, nbPionsNoirs, nbPionsBlancs-nbBlancsApresFusion);
-                    }
-                nbActions++;
-                }
-                if(magiePossible(plateau, coord, joueurNoir)){
-                    if(joueurNoir){
-                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
-                    }
-                    else{
-                        actions[nbActions] = chaineActionMagie(coord,nbPionsNoirs,nbPionsBlancs);
                     }
                 nbActions++;
                 }
@@ -141,19 +150,20 @@ public class JoueurTowa implements IJoueurTowa {
                
         }
         else{
-            if(voisineEnemiePresente(plateau, coord, estNoir)){
-                if(c.altitude==3){
-                    return false;
+            if(c.nature=='T'){
+                if(voisineEnemiePresente(plateau, coord, estNoir)){
+                    if(c.altitude==3){
+                        return false;
+                    }
+                    if(c.altitude<3){
+                        return true;
+                    }
                 }
-                if(c.altitude<3){
-                    return true;
+                if(c.altitude<4){
+                   return true;
                 }
             }
-            if(c.altitude<4){
-               return true;
-            }
-            
-        }
+        }   
         return false;
     }
     /**
@@ -216,7 +226,7 @@ public class JoueurTowa implements IJoueurTowa {
         Case c = plateau[coord.ligne][coord.colonne];
         Case sym = plateau[Coordonnees.coordSymetrique(coord).ligne][Coordonnees.coordSymetrique(coord).colonne];
         return (c.tourPresente && !(sym.tourPresente)
-                && (sym.altitude +c.hauteur <= 4)
+                && (sym.altitude +c.hauteur <= 4) && sym.nature=='T'
                 && c.estNoire==estNoir);      
     }
     /**
@@ -264,9 +274,9 @@ public class JoueurTowa implements IJoueurTowa {
                 + nbPionsNoirs + "," + nbPionsBlancs;
     }
     /**
-     * Chaîne de caractères correspondant à une action-mesure d'activation d'une tour.
+     * Chaîne de caractères correspondant à une action-mesure de fusion d'une tour.
      *
-     * @param coord coordonnées de la case à activer
+     * @param coord coordonnées de la case à fusioner
      * @param nbPionsNoirs nombre de pions noirs si cette action était jouée
      * @param nbPionsBlancs nombre de pions blancs si cette action était jouée
      * @return la chaîne codant cette action-mesure
@@ -300,6 +310,14 @@ public class JoueurTowa implements IJoueurTowa {
     static String chaineActionMagie(Coordonnees coord,int nbPionsNoirs, int nbPionsBlancs){
         return "M" + coord.carLigne() + coord.carColonne()+ ","
                 + nbPionsNoirs + "," + nbPionsBlancs;
+    }
+    /**
+     * Nombre de Pions a ajouté aprés la pose d'une tour "max"
+     * @param plateau le plateau
+     * @param coord les coordonnées de la case en question
+     */
+    int nbPionsApresMax(Case [][] plateau,Coordonnees coord){
+        return(4-(plateau[coord.ligne][coord.colonne].altitude));
     }
     /**
      * Nombre de Pions de la couleur opposé détruits lors de l'activation d'une tour
@@ -540,6 +558,7 @@ public class JoueurTowa implements IJoueurTowa {
      * @param plateau le plateau
      * @param coord les coordonnées de la case
      * @param estNoir la couleur du joueur
+     * @return vrai ssi il existe une tour voisine de la couleur opposée
      */
     static boolean voisineEnemiePresente(Case[][] plateau, Coordonnees coord, 
             boolean estNoir ){
@@ -554,6 +573,107 @@ public class JoueurTowa implements IJoueurTowa {
         }
     return tourPresente;    
     }
-   
+    /**
+     * Booléen qui renvoi vrai si il y'a au moins une tour blanche et une tour noire
+     * sur la colonne
+     * @param plateau le plateau
+     * @param coord les coordonnées de la case
+     * @return vrai vrai si il y'a au moins une tour blanche et une tour 
+     * noire sur la colonne
+     */
+    static boolean estCouvrant(Case[][] plateau, Coordonnees coord, boolean estNoir){
+        boolean tourBlancheCol=false; 
+        boolean tourNoireCol=false;
+        boolean colonneCouvrante=true;
+        boolean tourBlancheLig=false; 
+        boolean tourNoireLig=false;
+        boolean ligneCouvrante=true;
+        for (int lig = 0; lig < Coordonnees.NB_LIGNES; lig++) {
+            tourBlancheLig=false; 
+            tourNoireLig=false;
+            for (int col = 0; col < Coordonnees.NB_COLONNES; col++) {
+                // avant la pose
+                if(plateau[lig][col].tourPresente && !(plateau[lig][col].estNoire)){
+                    tourBlancheLig=true;
+                }
+                if(plateau[lig][col].tourPresente && (plateau[lig][col].estNoire)){
+                    tourNoireLig=true;
+                }
+                // après la pose sur coord
+                if(!plateau[lig][col].tourPresente){
+                    if(lig==coord.ligne && col==coord.colonne && estNoir){
+                        tourNoireLig=true;
+                    }
+                    if(lig==coord.ligne && col==coord.colonne && !estNoir){
+                        tourBlancheLig=true;
+                    }
+                }
+            }
+            // Présence tour Noire et tour Blanche sur la ligne 
+            if(!(tourBlancheLig && tourNoireLig)){
+                    colonneCouvrante=false;
+                }
+        }
+        for (int col = 0; col < Coordonnees.NB_COLONNES; col++) {
+            tourBlancheCol=false;
+            tourNoireCol=false;
+            for (int lig = 0; lig < Coordonnees.NB_LIGNES; lig++) {
+                // avant la pose
+                if(plateau[lig][col].tourPresente && !(plateau[lig][col].estNoire)){
+                    tourBlancheCol=true;
+                }
+                if(plateau[lig][col].tourPresente && (plateau[lig][col].estNoire)){
+                    tourNoireCol=true;
+                }
+                // après la pose sur coord
+                if(!plateau[lig][col].tourPresente){
+                    if(lig==coord.ligne && col==coord.colonne && estNoir){
+                        tourNoireCol=true;
+                    }
+                    if(lig==coord.ligne && col==coord.colonne && !estNoir){
+                        tourBlancheCol=true;
+                    }
+                }
+            }
+            // Présence tour Noire et tour Blanche sur la colonne 
+            if(!(tourBlancheCol && tourNoireCol)){
+                    ligneCouvrante=false;
+            }
+        }
+        return (colonneCouvrante && ligneCouvrante);
+    }
+    /**
+     * Booléen qui renvoi vrai si il y'a au moins une tour blanche et une tour noire
+     * sur la ligne
+     * @param plateau le plateau
+     * @param coord les coordonnées de la case
+     * @return vrai vrai  si il y'a au moins une tour blanche et une tour noire
+     * sur la ligne
+     */
+    static boolean ligEstCouvrante(Case[][] plateau, Coordonnees coord, boolean estNoir){
+        boolean tourBlancheLig=false; 
+        boolean tourNoireLig=false;
+        boolean ligneCouvrante=false;
+        for (int col = 0; col < Coordonnees.NB_COLONNES; col++) {
+            for (int lig = 0; lig < Coordonnees.NB_LIGNES; lig++) {
+                if(plateau[lig][col].tourPresente && !(plateau[lig][col].estNoire)
+                ||(!(plateau[coord.ligne][coord.colonne].tourPresente) && estNoir)){
+                    System.out.println("tour blanche trouvé");
+                    tourBlancheLig=true;
+                }
+                if(plateau[lig][col].tourPresente && (plateau[lig][col].estNoire)
+                ||(!(plateau[coord.ligne][coord.colonne].tourPresente) && estNoir)){
+                    System.out.println("tour noire trouvé");
+                    tourNoireLig=true;
+                }
+                ligneCouvrante = tourBlancheLig && tourNoireLig;
+                System.out.println(ligneCouvrante);
+                
+            }
+        }
+        
+    
+        return ligneCouvrante;    
+    }
     
 }
